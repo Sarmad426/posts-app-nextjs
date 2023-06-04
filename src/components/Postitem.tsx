@@ -5,6 +5,7 @@ import Like from "../assets/like.svg";
 import dislike1 from "../assets/unlike.svg";
 import dislike2 from "../assets/unlike black.svg";
 import { useRouter } from "next/navigation";
+import trashIcon from "../assets/delete.svg";
 
 interface Post {
   title: string;
@@ -16,6 +17,7 @@ interface Post {
   createdAt: Date;
   handleLike: (id: string) => void;
   handleDislike: (id: string) => void;
+  handleDelete: (id: string) => void;
 }
 const TodoItem = ({
   id,
@@ -25,6 +27,7 @@ const TodoItem = ({
   dislike,
   handleLike,
   handleDislike,
+  handleDelete,
 }: Post) => {
   const router = useRouter();
   return (
@@ -34,31 +37,44 @@ const TodoItem = ({
       </div>
       <div className="mt-5">
         <p>{content}</p>
+      </div>
+      <div className="flex justify-between">
+        <div>
+          <button
+            className="text-white rounded-md mt-9 mb-0"
+            onClick={() => {
+              handleLike(id);
+              return router.refresh();
+            }}
+          >
+            {Liked ? (
+              <Image src={Like} alt="Like" width={30} />
+            ) : (
+              <Image src={ThumbIcon} alt="Like" width={30} />
+            )}
+          </button>
+          <button
+            className="text-white rounded-md mt-5 mb-0 ml-5"
+            onClick={() => {
+              handleDislike(id);
+              return router.refresh();
+            }}
+          >
+            {!dislike || Liked ? (
+              <Image src={dislike1} alt="Like" width={30} />
+            ) : (
+              <Image src={dislike2} alt="Like" width={30} />
+            )}
+          </button>
+        </div>
         <button
-          className="text-white rounded-md mt-9 mb-0"
+          className="text-white rounded-md mt-5 mb-0 ml-14"
           onClick={() => {
-            handleLike(id);
+            handleDelete(id);
             return router.refresh();
           }}
         >
-          {Liked ? (
-            <Image src={Like} alt="Like" width={30} />
-          ) : (
-            <Image src={ThumbIcon} alt="Like" width={30} />
-          )}
-        </button>
-        <button
-          className="text-white rounded-md mt-5 mb-0 ml-5"
-          onClick={() => {
-            handleDislike(id);
-            return router.refresh();
-          }}
-        >
-          {!dislike || Liked ? (
-            <Image src={dislike1} alt="Like" width={30} />
-          ) : (
-            <Image src={dislike2} alt="Like" width={30} />
-          )}
+          <Image src={trashIcon} alt="delete" />
         </button>
       </div>
     </div>
