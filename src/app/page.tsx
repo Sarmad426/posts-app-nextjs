@@ -42,6 +42,10 @@ export default async function Home() {
       });
     }
   };
+  const handleDelete = async (id: string) => {
+    "use server";
+    return await prisma.post.delete({ where: { id } });
+  };
   return (
     <main className="py-5 text-center mx-auto">
       <h1 className="text-2xl font-semibold my-3 text-orange-500">POSTS</h1>
@@ -56,6 +60,7 @@ export default async function Home() {
               {...post}
               handleLike={handleLike}
               handleDislike={handleDislike}
+              handleDelete={handleDelete}
             />
           );
         })}
