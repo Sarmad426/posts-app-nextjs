@@ -15,6 +15,7 @@ model Post {
   title     String
   content   String?
   Liked     Boolean  @default(false)
+  dislike   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
