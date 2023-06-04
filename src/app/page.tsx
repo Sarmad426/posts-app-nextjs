@@ -1,4 +1,4 @@
-import TodoItem from "@/components/TodoItem";
+import TodoItem from "@/components/Postitem";
 import Link from "next/link";
 import prisma from "@/lib/db";
 interface Post {
@@ -6,6 +6,7 @@ interface Post {
   content: string | null;
   id: string;
   Liked: boolean;
+  dislike: boolean;
   updatedAt: Date;
   createdAt: Date;
 }
@@ -20,7 +21,25 @@ export default async function Home() {
     if (post?.Liked) {
       await prisma.post.update({ where: { id }, data: { Liked: false } });
     } else {
-      await prisma.post.update({ where: { id }, data: { Liked: true } });
+      await prisma.post.update({
+        where: { id },
+        data: { Liked: true, dislike: false },
+      });
+    }
+  };
+  const handleDislike = async (id: string) => {
+    "use server";
+    const post = await prisma.post.findUnique({ where: { id } });
+    if (!post?.dislike) {
+      await prisma.post.update({
+        where: { id },
+        data: { Liked: false, dislike: true },
+      });
+    } else {
+      await prisma.post.update({
+        where: { id },
+        data: { dislike: false },
+      });
     }
   };
   return (
@@ -31,7 +50,14 @@ export default async function Home() {
       </Link>
       <div className="flex flex-wrap justify-start my-10">
         {data.map((post: Post) => {
-          return <TodoItem key={post.id} {...post} handleLike={handleLike} />;
+          return (
+            <TodoItem
+              key={post.id}
+              {...post}
+              handleLike={handleLike}
+              handleDislike={handleDislike}
+            />
+          );
         })}
       </div>
     </main>
