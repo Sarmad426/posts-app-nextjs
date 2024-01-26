@@ -7,7 +7,7 @@ const FormTodo = () => {
     const title = event.get("title")?.valueOf();
     const content = event.get("content")?.valueOf();
     if (typeof title === "string" && typeof content === "string") {
-      await prisma.post.create({ data: { title, content, Liked: false } });
+      await prisma.post.create({ data: { title, content } });
       redirect("/");
     } else {
       throw new Error("Cannot Create A New Post. Please Provide Valid Data");
